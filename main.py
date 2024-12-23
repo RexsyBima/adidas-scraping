@@ -1,14 +1,13 @@
 from src.utils import get_soup
+import sys
 from src.models import Category, Product
 import json
+assert len(sys.argv) == 2, "Usage: python main.py <sku>"
 
 
 def main():
-    url = "https://www.adidas.co.id/graphql?hash=1081972869&_filter_0={sku:{eq:JQ8757},customer_group_id:{eq:0}}"
+    url = sys.argv[1]
     data = get_soup(url)
-    # print(data)
-    # with open("data.json", "w") as f:
-    #     json.dump(data, f)
     product = Product(
         id=1,
         name=data["data"]["products"]["items"][0]["name"],
@@ -24,6 +23,7 @@ def main():
         product["release_date"] = product["release_date"].strftime(
             "%Y-%m-%d %H:%M:%S")
         json.dump(product, f)
+    print("data saved into product.json")
 
 
 if __name__ == "__main__":
